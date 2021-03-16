@@ -1,0 +1,78 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+/*
+ * This file is part of the Packagist Mirror.
+ *
+ * For the full license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
+$autoload = __DIR__ . '/../vendor/autoload.php';
+if (!file_exists($autoload)) {
+    die(
+        'You need to set up the project dependencies '.
+        'using the following commands:' . PHP_EOL .
+        'wget http://getcomposer.org/composer.phar' . PHP_EOL .
+        'php composer.phar install' . PHP_EOL
+    );
+}
+
+require $autoload;
+
+ini_set('memory_limit', '-1');
+chdir(__DIR__.'/..');
+
+// Prepare using default .env
+if (!file_exists('.env')) {
+    copy('.env.example', '.env');
+}
+
+// Load env
+$adapter = [new Dotenv\Repository\Adapter\EnvConstAdapter()];
+$repository = Dotenv\Repository\RepositoryBuilder::create()->withReaders($adapter)->immutable()->make();
+Dotenv\Dotenv::create($repository, getcwd(), null)->load();
+
+date_default_timezone_set(getenv('TZ'));
+
+// Using Sebastian version formatter
+$version = new SebastianBergmann\Version(
+    '1.0.4', getcwd()
+);
+
+$cli = new Symfony\Component\Console\Application(
+    getenv('APP_NAME'),
+    $version->getVersion()
+);
+
+$filesystem = new Webs\Mirror\Filesystem(getenv('PUBLIC_DIR'));
+$provider = new Webs\Mirror\Provider;
+$package = new Webs\Mirror\Package(getenv('URI_PATTERN'));
+$progressBar = new Webs\Mirror\ProgressBar;
+
+$mirror = new Webs\Mirror\Mirror(
+    getenv('MAIN_MIRROR'),
+    explode(',', getenv('DATA_MIRROR'))
+);
+$http = new Webs\Mirror\Http($mirror, (int) getenv('MAX_CONNECTIONS'));
+
+$clean = new Webs\Mirror\Command\Clean();
+$clean->setProgressBar($progressBar);
+$clean->setProvider($provider);
+$clean->setPackage($package);
+$clean->setFilesystem($filesystem);
+$clean->setHttp($http);
+
+$create = new Webs\Mirror\Command\Create();
+$create->setProgressBar($progressBar);
+$create->setProvider($provider);
+$create->setPackage($package);
+$create->setFilesystem($filesystem);
+$create->setClean($clean);
+$create->setHttp($http);
+
+$cli->add($create);
+$cli->add($clean);
+$cli->run();

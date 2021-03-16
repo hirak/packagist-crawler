@@ -1,0 +1,18 @@
+language: php
+dist: trusty
+
+matrix:
+  include:
+    - php: 7.2
+    - php: 7.3
+    - php: 7.4snapshot
+    - php: nightly
+      env: ALPHA=true
+
+install:
+  - composer validate
+  - if [[ $ALPHA == true ]]; then composer install --ignore-platform-reqs; fi
+  - if [[ $ALPHA != true ]]; then composer install; fi
+
+script:
+  - vendor/bin/phpunit

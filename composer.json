@@ -1,35 +1,39 @@
 {
-    "name": "hirak/packagist-crawler",
-    "description": "build mirror of packagist.org",
-    "license": "CC0-1.0",
+    "name": "webysther/packagist-mirror",
+    "description": "Build mirror of packagist",
+    "keywords": ["packagist", "mirror"],
+    "license": "MIT",
     "authors": [
-        {
-            "name": "Hiraku NAKANO",
-            "email": "hiraku@tojiru.net"
-        }
+        { "name": "Webysther", "email": "webysther@gmail.com" }
     ],
     "require": {
-        "spindle/httpclient": "1.*",
-        "guiguiboy/php-cli-progress-bar": "dev-master",
-        "php": ">=5.4",
+        "php": ">=7.2",
+        "ext-zlib":"*",
         "ext-json": "*",
-        "ext-hash": "*",
-        "ext-curl": "*",
-        "ext-PDO": "*",
-        "ext-zlib": "*",
-        "ext-pdo_sqlite": "*"
+        "guzzlehttp/guzzle": "~6",
+        "vlucas/phpdotenv": "~5",
+        "symfony/console": "~4",
+        "sebastian/version": "~2",
+        "nesbot/carbon": "~2",
+        "php-snippets/circular-array": "~1",
+        "league/flysystem-cached-adapter": "~1",
+        "illuminate/support": "~6"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~8",
+        "league/flysystem-memory": "~1",
+        "mikey179/vfsstream": "~1"
+    },
+    "suggest": {
+        "hirak/prestissimo": "Composer parallel install plugin"
     },
     "autoload": {
-        "psr-4": {
-            "hirak\\PackagistCrawler\\": "src/"
-        }
+        "psr-4": { "Webs\\Mirror\\": "src/" }
+    },
+    "autoload-dev": {
+        "psr-4": { "Webs\\Mirror\\Tests\\": "tests/" }
     },
     "bin": [
-        "parallel.php"
-    ],
-    "scripts": {
-        "crawl": "php parallel.php",
-        "test": "php check.php",
-        "compress": "tar cjf packagist.tar.bz2 cache/"
-    }
+        "bin/mirror"
+    ]
 }
