@@ -109,7 +109,9 @@ function downloadProviders($config, $globals)
                 if (!file_exists(dirname($cachename))) {
                     mkdir(dirname($cachename), 0777, true);
                 }
-                file_put_contents($cachename, $res->getBody());
+                if (!$config->disableRawJson) {
+                    file_put_contents($cachename, $res->getBody());
+                }
                 if ($config->generateGz) {
                     file_put_contents($cachename . '.gz', gzencode($res->getBody()));
                 }
@@ -191,8 +193,10 @@ function downloadPackages($config, $globals, $providers)
                 if (!file_exists(dirname($cachefile))) {
                     mkdir(dirname($cachefile), 0777, true);
                 }
-                file_put_contents($cachefile, $res->getBody());
-                file_put_contents($cachefile2, $res->getBody());
+                if (!$config->disableRawJson) {
+                    file_put_contents($cachefile, $res->getBody());
+                    file_put_contents($cachefile2, $res->getBody());
+                }
                 if ($config->generateGz) {
                     $gz = gzencode($res->getBody());
                     file_put_contents($cachefile . '.gz', $gz);
@@ -233,7 +237,9 @@ function downloadPackages($config, $globals, $providers)
         if (!file_exists(dirname($cachefile))) {
             mkdir(dirname($cachefile), 0777, true);
         }
-        file_put_contents($cachefile, $res->getBody());
+        if (!$config->disableRawJson) {
+            file_put_contents($cachefile, $res->getBody());
+        }
         if ($config->generateGz) {
             $gz = gzencode($res->getBody());
             file_put_contents($cachefile . '.gz', $gz);

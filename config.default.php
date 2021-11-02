@@ -12,6 +12,7 @@ return (object)array(
     'expiredDb' => __DIR__ . '/cache/.expired.db',
     'maxConnections' => 2,
     'generateGz' => true,
+    'disableRawJson' => false,
     'expireMinutes' => 24 * 60,
     'url' => 'http://localhost',
     'cfemail' => null,
