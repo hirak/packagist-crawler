@@ -182,7 +182,6 @@ function downloadPackages($config, $globals, $providers)
 
                 $cachefile = $cachedir
                     . str_replace("$config->packagistUrl/", '', $res->getUrl());
-                $cachefile2 = $cachedir . '/p/' . $req->packageName . '.json';
                 $urls[] = $config->url . '/p/' . $req->packageName . '.json';
 
                 if ($glob = glob("{$cachedir}p/$req->packageName\$*")) {
@@ -195,12 +194,10 @@ function downloadPackages($config, $globals, $providers)
                 }
                 if (!$config->disableRawJson) {
                     file_put_contents($cachefile, $res->getBody());
-                    file_put_contents($cachefile2, $res->getBody());
                 }
                 if ($config->generateGz) {
                     $gz = gzencode($res->getBody());
                     file_put_contents($cachefile . '.gz', $gz);
-                    file_put_contents($cachefile2 . '.gz', $gz);
                 }
             }
         }
@@ -226,7 +223,6 @@ function downloadPackages($config, $globals, $providers)
 
         $cachefile = $cachedir
             . str_replace("$config->packagistUrl/", '', $res->getUrl());
-        $cachefile2 = $cachedir . '/p/' . $req->packageName . '.json';
         $urls[] = $config->url . '/p/' . $req->packageName . '.json';
 
         if ($glob = glob("{$cachedir}p/$req->packageName\$*")) {
@@ -243,7 +239,6 @@ function downloadPackages($config, $globals, $providers)
         if ($config->generateGz) {
             $gz = gzencode($res->getBody());
             file_put_contents($cachefile . '.gz', $gz);
-            file_put_contents($cachefile2 . '.gz', $gz);
         }
 
         $progressBar->advance();
