@@ -97,7 +97,7 @@ class ExpiredFileManager
     /**
      * get file list from expired.db
      * @param integer $from timestamp
-     * @return Traversable (List<string>)
+     * @return \Traversable (List<string>)
      */
     function getExpiredFileList($until=null)
     {

@@ -138,7 +138,11 @@ function downloadPackages($config, $globals, $providers)
     $urls = [];
 
     foreach ($providers as $providerjson) {
-        $list = json_decode(file_get_contents($providerjson));
+        if ($config->generateGz) {
+            $list = json_decode(gzdecode(file_get_contents("$providerjson.gz")));
+        } else {
+            $list = json_decode(file_get_contents($providerjson));
+        }
         if (!$list || empty($list->providers)) continue;
 
         $list = $list->providers;
