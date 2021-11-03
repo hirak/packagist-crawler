@@ -95,29 +95,28 @@ function downloadProviders($config, $globals)
         $cachename = $cachedir . $fileurl;
         $providers[] = $cachename;
 
-        if (!file_exists($cachename)){
-            $req->setOption('url', $config->packagistUrl . '/' . $fileurl);
-            $res = $req->send();
+        if (file_exists($cachename) || file_exists("$cachename.gz")) continue;
+        $req->setOption('url', $config->packagistUrl . '/' . $fileurl);
+        $res = $req->send();
 
-            if (200 === $res->getStatusCode()) {
-                $oldcache = $cachedir . str_replace('%hash%.json', '*', $tpl);
-                if ($glob = glob($oldcache)) {
-                    foreach ($glob as $old) {
-                        $globals->expiredManager->add($old, time());
-                    }
+        if (200 === $res->getStatusCode()) {
+            $oldcache = $cachedir . str_replace('%hash%.json', '*', $tpl);
+            if ($glob = glob($oldcache)) {
+                foreach ($glob as $old) {
+                    $globals->expiredManager->add($old, time());
                 }
-                if (!file_exists(dirname($cachename))) {
-                    mkdir(dirname($cachename), 0777, true);
-                }
-                if (!$config->disableRawJson) {
-                    file_put_contents($cachename, $res->getBody());
-                }
-                if ($config->generateGz) {
-                    file_put_contents($cachename . '.gz', gzencode($res->getBody()));
-                }
-            } else {
-                $globals->retry = true;
             }
+            if (!file_exists(dirname($cachename))) {
+                mkdir(dirname($cachename), 0777, true);
+            }
+            if (!$config->disableRawJson) {
+                file_put_contents($cachename, $res->getBody());
+            }
+            if ($config->generateGz) {
+                file_put_contents($cachename . '.gz', gzencode($res->getBody()));
+            }
+        } else {
+            $globals->retry = true;
         }
 
         $progressBar->advance();
@@ -158,7 +157,7 @@ function downloadPackages($config, $globals, $providers)
             ++$sum;
             $url = "$config->packagistUrl/p/$packageName\$$provider->sha256.json";
             $cachefile = $cachedir . str_replace("$config->packagistUrl/", '', $url);
-            if (file_exists($cachefile)) continue;
+            if (file_exists($cachefile) || file_exists("$cachefile.gz")) continue;
 
             $req = $globals->q->dequeue();
             $req->packageName = $packageName;
