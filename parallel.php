@@ -73,6 +73,9 @@ function downloadProviders($config, $globals)
                 $packages->$k = 'https://packagist.org' . $packages->$k;
             }
         }
+        if (isset($packages->{'metadata-url'})) { // temporary
+            unset($packages->{'metadata-url'});
+        }
         file_put_contents($packagesCache . '.new', json_encode($packages));
     } else {
         //no changes';
