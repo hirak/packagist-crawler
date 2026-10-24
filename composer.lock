@@ -1,10 +1,9 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "hash": "2e937a4f120a0b748759af9dd8377cf2",
     "content-hash": "325314e6a447f35b59eaeff8d1bca3c5",
     "packages": [
         {
@@ -25,6 +24,7 @@
                 "ext-mbstring": "*",
                 "php": ">=5.3.0"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-0": {
@@ -49,7 +49,12 @@
                 "command-line",
                 "progress"
             ],
-            "time": "2014-11-19 13:12:00"
+            "support": {
+                "issues": "https://github.com/guiguiboy/PHP-CLI-Progress-Bar/issues",
+                "source": "https://github.com/guiguiboy/PHP-CLI-Progress-Bar/tree/1.0.0"
+            },
+            "abandoned": true,
+            "time": "2014-11-19T13:12:00+00:00"
         },
         {
             "name": "spindle/httpclient",
@@ -93,7 +98,11 @@
                 }
             ],
             "description": "simple wrapper for ext-curl, multi-request enabled",
-            "time": "2014-09-15 13:56:36"
+            "support": {
+                "issues": "https://github.com/spindle/spindle-httpclient/issues",
+                "source": "https://github.com/spindle/spindle-httpclient/tree/master"
+            },
+            "time": "2014-09-15T13:56:36+00:00"
         }
     ],
     "packages-dev": [],
@@ -113,5 +122,6 @@
         "ext-zlib": "*",
         "ext-pdo_sqlite": "*"
     },
-    "platform-dev": []
+    "platform-dev": {},
+    "plugin-api-version": "2.9.0"
 }
